@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/cplabels/labelsummary</path>
+    <page_callback>CRM_Cplabels_Page_LabelSummary</page_callback>
+    <title>LabelSummary</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+</menu>

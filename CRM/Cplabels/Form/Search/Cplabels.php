@@ -32,7 +32,8 @@ class CRM_Cplabels_Form_Search_Cplabels extends CRM_Contact_Form_Search_Custom_B
     $form->addElement('select', 'team', ts('Team'), $team, array('class' => 'crm-select2 huge', 'multiple' => TRUE));
 
     // add select for service types
-    $serveType = CRM_Core_PseudoConstant::get('CRM_Core_BAO_CustomField', 'custom_58', array(), 'search');
+    $custom_id = CRM_Cplabels_Utils::getCustomFieldProp('Service_Type', 'Volunteer_details');
+    $serveType = CRM_Core_PseudoConstant::get('CRM_Core_BAO_CustomField', "custom_{$custom_id}", array(), 'search');
     $form->addElement('select', 'serve_type', ts('Service type'), $serveType, array('class' => 'crm-select2 huge', 'multiple' => TRUE));
 
     // Add select for communication preference.
@@ -43,7 +44,8 @@ class CRM_Cplabels_Form_Search_Cplabels extends CRM_Contact_Form_Search_Custom_B
     $form->addElement('select', 'limit', ts('Limit'), $limitOptions, array('class' => 'crm-select2 huge'));
 
     // Add selects for correspondence types.
-    $correspondenceTypeOptions = array('' => '') + CRM_Core_PseudoConstant::get('CRM_Core_BAO_CustomField', 'custom_70', array(), 'search');
+    $custom_id = CRM_Cplabels_Utils::getCustomFieldProp('Correspondence_types', 'Communication');
+    $correspondenceTypeOptions = array('' => '') + CRM_Core_PseudoConstant::get('CRM_Core_BAO_CustomField', "custom_{$custom_id}", array(), 'search');
     $form->addElement('select', 'correspondence_type', ts('Correspondence type'), $correspondenceTypeOptions, array('class' => 'crm-select2 huge'));
 
     /**
@@ -99,7 +101,6 @@ class CRM_Cplabels_Form_Search_Cplabels extends CRM_Contact_Form_Search_Custom_B
    * @return string, sql
    */
   function all($offset = 0, $rowcount = 0, $sort = NULL, $includeContactIDs = FALSE, $justIDs = FALSE) {
-    dsm(__FUNCTION__);
     // delegate to $this->sql(), $this->select(), $this->from(), $this->where(), etc.
     $sort = 'contact_a.sort_name DESC';
     $sql = $this->sql($this->select(), $offset, $rowcount, $sort, $includeContactIDs, NULL);
@@ -133,17 +134,18 @@ class CRM_Cplabels_Form_Search_Cplabels extends CRM_Contact_Form_Search_Custom_B
    */
   function from() {
 
+    $customTableNameVolunteer = CRM_Cplabels_Utils::getCustomGroupProp('Volunteer_details');
+    $customTableNameCommunications = CRM_Cplabels_Utils::getCustomGroupProp('Communication');
+
     return "
-
-
       FROM
         civicrm_contact contact_a
         INNER JOIN civicrm_relationship r 
           ON r.contact_id_b = contact_a.id and r.relationship_type_id = '17'
           AND r.is_active
           AND IFNULL(r.end_date, CURDATE()) >= CURDATE()
-        INNER JOIN civicrm_value_volunteer_det_8 vvd ON vvd.entity_id = r.id
-        LEFT JOIN civicrm_value_communication_1 vcom ON vcom.entity_id = contact_a.id
+        INNER JOIN $customTableNameVolunteer vvd ON vvd.entity_id = r.id
+        LEFT JOIN $customTableNameCommunications vcom ON vcom.entity_id = contact_a.id
         LEFT JOIN civicrm_email email ON (email.contact_id = contact_a.id AND email.is_primary = 1)
         LEFT JOIN civicrm_phone phone ON (phone.contact_id = contact_a.id AND phone.is_primary = 1)
         LEFT JOIN civicrm_address address ON (address.contact_id = contact_a.id AND address.is_primary = 1)
@@ -173,20 +175,23 @@ class CRM_Cplabels_Form_Search_Cplabels extends CRM_Contact_Form_Search_Custom_B
 
     if ($serve_type = CRM_Utils_Array::value('serve_type', $this->_formValues)) {
       $serve_type = CRM_Cplabels_Utils::arrayToSqlInValues($serve_type, 'String');
+      $customColumnName = CRM_Cplabels_Utils::getCustomFieldProp('Service_Type', 'Volunteer_details', 'column_name');
       $whereClause .= "
-        AND vvd.service_type_58 IN ($serve_type)
+        AND vvd.$customColumnName IN ($serve_type)
       ";
     }
 
     if ($correspondence_type = CRM_Utils_Array::value('correspondence_type', $this->_formValues)) {
       if ($correspondence_type == 'N') {
-        $or_empty = " OR vcom.correspondence_types_70 = '' ";
+        $customColumnName = CRM_Cplabels_Utils::getCustomFieldProp('Correspondence_types', 'Communication', 'column_name');
+        $or_empty = " OR vcom.$customColumnName = '' ";
       }
       else {
         $or_empty = "";
       }
+      $customColumnName = CRM_Cplabels_Utils::getCustomFieldProp('Correspondence_types', 'Communication', 'column_name');
       $whereClause .= "
-        AND ( IFNULL(vcom.correspondence_types_70, 'N') = '$correspondence_type' $or_empty )
+        AND ( IFNULL(vcom.$customColumnName, 'N') = '$correspondence_type' $or_empty )
       ";
     }
 

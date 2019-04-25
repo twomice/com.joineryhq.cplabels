@@ -1,4 +1,7 @@
 (function ($, ts) {
+  
+  var submitt3edFormData;
+  
   // Add a unique ID to the table holding bhfe fields, so we can access it
   // directly later.
   var first_bhfe_id = CRM.vars.cplabels.bhfe_fields[0];
@@ -18,11 +21,19 @@
   $('table#bhfe-table').remove();
   
   $('div.crm-contact-task-mailing-label-form-block').append('\n\
-    <div class="help" id="cplabels_summary">' + ts('Click <em>%1</em> to view summary here ...', {1: ts('Make Mailing Labels')}) + '</div>\n\
+<fieldset>\n\
+    <h3><span class="crm_blocktitle">' + ts('Labels summary') + '</span></h3>\n\
+<button id="cplabels_load_summary" disabled="disabled">Display summary for most recently downloaded labels</button></fieldset>\n\
 \n\
   ');
   
-  $('form#Labels').submit(function(e){
-    CRM.loadPage();
+  $('form#Label').submit(function(e){
+    $('button#cplabels_load_summary').enable();
+    submittedFormData = $('form#Label').serialize();      
+  });
+  
+  $('button#cplabels_load_summary').click(function(e){
+    CRM.loadPage(CRM.url('civicrm/cplabels/labelsummary?' + submittedFormData));
+    e.preventDefault();
   });
 })(CRM.$, CRM.ts('com.joineryhq.metrotweaks'));

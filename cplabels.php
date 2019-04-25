@@ -4,9 +4,9 @@ require_once 'cplabels.civix.php';
 use CRM_Cplabels_ExtensionUtil as E;
 
 /**
- * Implements hook_civicrm_buildForm().
+ * Implements hook_civicrm_postProcess().
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_postProcess
  */
 function cplabels_civicrm_postProcess($formName, &$form) {
   if (
