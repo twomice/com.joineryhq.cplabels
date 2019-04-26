@@ -9,14 +9,18 @@ use CRM_Cplabels_ExtensionUtil as E;
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_postProcess
  */
 function cplabels_civicrm_postProcess($formName, &$form) {
-  if (
-    $formName == 'CRM_Contact_Form_Search_Custom'
-    && $form->getVar('_customSearchClass') == 'CRM_Cplabels_Form_Search_Cplabels_Volunteer'
-  ) {
-    // This is our custom search for carepartners labels. Cache the form values
-    // in the session.
-    if ($qfKey = CRM_Utils_Array::value('qfKey', $form->_formValues)) {
-      CRM_Cplabels_Utils::setSessionVar("formValues_{$qfKey}", $form->_formValues);
+  if ($formName == 'CRM_Contact_Form_Search_Custom') {
+    $supportedSearches = array(
+      'CRM_Cplabels_Form_Search_Cplabels_Volunteer',
+      'CRM_Cplabels_Form_Search_Cplabels_CommonGround',
+    );
+    
+    if (in_array($form->getVar('_customSearchClass'), $supportedSearches)) {
+      // This is one of our custom searches for carepartners labels. Cache the
+      // form values in the session.
+      if ($qfKey = CRM_Utils_Array::value('qfKey', $form->_formValues)) {
+        CRM_Cplabels_Utils::setSessionVar("formValues_{$qfKey}", $form->_formValues);
+      }
     }
   }
 }
@@ -31,14 +35,18 @@ function cplabels_civicrm_buildForm($formName, &$form) {
     $qfKey = $form->controller->_key;
     $customSearchSessionValues = CRM_Cplabels_Utils::getSessionVar("formValues_{$qfKey}", array());
     if (!empty($customSearchSessionValues)) {
-      // We're coming directly from our custom search for carepartners labels.
+      // We're coming directly from one of our custom search for carepartners labels.
       // Add our extra "sort" field and anytyhing else we need here.
-
       $sortOptions = array(
         'sort_name' => ts('Contact Name'),
         'postal_code' => ts('Postal Code'),
-        'team_name' => ts('Team Name'),
       );
+
+      // Allow sort by Team Name on Volunteer labels only.
+      if ('CRM_Cplabels_Form_Search_Cplabels_Volunteer' == CRM_Utils_Array::value('customSearchClass', $customSearchSessionValues)) {
+        $sortOptions['team_name'] = ts('Team Name');
+      }
+
       $form->add('select', 'cplabel_sort', ts('Sort by'), $sortOptions);
 
       // Assign bhfe fields to the template.

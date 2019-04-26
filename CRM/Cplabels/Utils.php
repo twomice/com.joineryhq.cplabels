@@ -47,6 +47,20 @@ class CRM_Cplabels_Utils {
           uasort($rows, function($a, $b) {
             return strcmp($a['team_name'], $b['team_name']);
           });
+          // Insert team headers by wasting one label per team.
+          $teamName = '';
+          $newRows = array();
+          foreach ($rows as $cid => $row) {
+            if ($row['team_name'] != $teamName) {
+              $teamName = $row['team_name'];
+              $teamRow = array_fill_keys(array_keys($row), '');
+              $teamRow['addressee_display'] = '-------------------';
+              $teamRow['street_address'] = $teamName;
+              $newRows[$teamName] = $teamRow;
+            }
+            $newRows[$cid] = $row;
+          }
+          $rows = $newRows;
         }
       }
     }

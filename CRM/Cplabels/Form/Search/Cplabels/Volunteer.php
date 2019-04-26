@@ -78,7 +78,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
   function &columns() {
     // return by reference
     $columns = array(
-      E::ts('Name') => 'display_name',
+      E::ts('Name') => 'sort_name',
       E::ts('Address') => 'street_address',
       E::ts('City') => 'city',
       E::ts('State') => 'state_province',
@@ -102,7 +102,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
    */
   function all($offset = 0, $rowcount = 0, $sort = NULL, $includeContactIDs = FALSE, $justIDs = FALSE) {
     // delegate to $this->sql(), $this->select(), $this->from(), $this->where(), etc.
-    $sort = 'contact_a.sort_name DESC';
+    $sort = 'contact_a.sort_name';
     $sql = $this->sql($this->select(), $offset, $rowcount, $sort, $includeContactIDs, NULL);
     return $sql;
   }
@@ -116,7 +116,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
     return "
       DISTINCT
       contact_a.id as contact_id,
-      contact_a.display_name as display_name,
+      contact_a.sort_name as sort_name,
       address.street_address,
       address.city,
       state_province.name as state_province,
