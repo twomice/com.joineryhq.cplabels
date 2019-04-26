@@ -11,7 +11,7 @@ use CRM_Cplabels_ExtensionUtil as E;
 function cplabels_civicrm_postProcess($formName, &$form) {
   if (
     $formName == 'CRM_Contact_Form_Search_Custom'
-    && $form->getVar('_customSearchClass') == 'CRM_Cplabels_Form_Search_Cplabels'
+    && $form->getVar('_customSearchClass') == 'CRM_Cplabels_Form_Search_Cplabels_Volunteer'
   ) {
     // This is our custom search for carepartners labels. Cache the form values
     // in the session.

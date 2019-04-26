@@ -4,7 +4,7 @@ use CRM_Cplabels_ExtensionUtil as E;
 /**
  * A custom contact search
  */
-class CRM_Cplabels_Form_Search_Cplabels extends CRM_Contact_Form_Search_Custom_Base implements CRM_Contact_Form_Search_Interface {
+class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Search_Custom_Base implements CRM_Contact_Form_Search_Interface {
   function __construct(&$formValues) {
     parent::__construct($formValues);
   }

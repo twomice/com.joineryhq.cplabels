@@ -6,14 +6,14 @@
 return array (
   0 => 
   array (
-    'name' => 'CRM_Cplabels_Form_Search_Cplabels',
+    'name' => 'CRM_Cplabels_Form_Search_Cplabels_Volunteer',
     'entity' => 'CustomSearch',
     'params' => 
     array (
       'version' => 3,
-      'label' => 'Cplabels',
-      'description' => 'Cplabels (com.joineryhq.cplabels)',
-      'class_name' => 'CRM_Cplabels_Form_Search_Cplabels',
+      'label' => 'Cplabels_Volunteer',
+      'description' => 'Cplabels_Volunteer (com.joineryhq.cplabels)',
+      'class_name' => 'CRM_Cplabels_Form_Search_Cplabels_Volunteer',
     ),
   ),
 );
