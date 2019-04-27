@@ -52,7 +52,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
      * if you are using the standard template, this array tells the template what elements
      * are part of the search criteria
      */
-    $form->assign('elements', array('serve_type', 'team', 'limit', 'correspondence_type'));
+    $form->assign('elements', array('team', 'serve_type', 'limit', 'correspondence_type'));
   }
 
   /**
@@ -140,7 +140,8 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
     return "
       FROM
         civicrm_contact contact_a
-        INNER JOIN civicrm_relationship r 
+        INNER JOIN civicrm_relationship r
+        -- FIXME: don't hardcode 17 here.
           ON r.contact_id_b = contact_a.id and r.relationship_type_id = '17'
           AND r.is_active
           AND IFNULL(r.end_date, CURDATE()) >= CURDATE()
