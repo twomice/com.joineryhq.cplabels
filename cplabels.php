@@ -13,6 +13,7 @@ function cplabels_civicrm_postProcess($formName, &$form) {
     $supportedSearches = array(
       'CRM_Cplabels_Form_Search_Cplabels_Volunteer',
       'CRM_Cplabels_Form_Search_Cplabels_CommonGround',
+      'CRM_Cplabels_Form_Search_Cplabels_Client',
     );
     
     if (in_array($form->getVar('_customSearchClass'), $supportedSearches)) {
@@ -42,8 +43,13 @@ function cplabels_civicrm_buildForm($formName, &$form) {
         'postal_code' => ts('Postal Code'),
       );
 
-      // Allow sort by Team Name on Volunteer labels only.
-      if ('CRM_Cplabels_Form_Search_Cplabels_Volunteer' == CRM_Utils_Array::value('customSearchClass', $customSearchSessionValues)) {
+      // Allow sort by Team Name on certain label searches only.
+      $customSearchClass = CRM_Utils_Array::value('customSearchClass', $customSearchSessionValues);
+      $sortTeamSearches = array (
+        'CRM_Cplabels_Form_Search_Cplabels_Volunteer',
+        'CRM_Cplabels_Form_Search_Cplabels_Client',
+      );
+      if (in_array($customSearchClass, $sortTeamSearches)) {
         $sortOptions['team_name'] = ts('Team Name');
       }
 
