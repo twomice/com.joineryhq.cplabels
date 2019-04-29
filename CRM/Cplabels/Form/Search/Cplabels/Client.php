@@ -81,6 +81,10 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
    * @param CRM_Core_Form $form
    */
   public function buildForm(&$form) {
+
+    // Define a custom title for the search form.
+    $this->setTitle(ts('Mailing Labels: Clients'));
+
     // add select for team
     $api_params = array(
       'contact_sub_type' => 'team',
