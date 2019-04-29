@@ -53,6 +53,9 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
      * are part of the search criteria
      */
     $form->assign('elements', array('team', 'serve_type', 'limit', 'correspondence_type'));
+
+    $form->addRule('team',E::ts('Field "Team" is required'),'required');
+    $form->addRule('serve_type',E::ts('Field "Service type" is required'),'required');
   }
 
   /**
@@ -84,8 +87,6 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
       E::ts('State') => 'state_province',
       E::ts('Postal Code') => 'postal_code',
       E::ts('County') => 'county',
-      E::ts('email') => 'email',
-      E::ts('phone') => 'phone',
     );
     return $columns;
   }
@@ -121,9 +122,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
       address.city,
       state_province.name as state_province,
       address.postal_code,
-      county.name as county,
-      email.email,
-      phone.phone
+      county.name as county
     ";
   }
 
@@ -147,8 +146,6 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
           AND IFNULL(r.end_date, CURDATE()) >= CURDATE()
         INNER JOIN $customTableNameVolunteer vvd ON vvd.entity_id = r.id
         LEFT JOIN $customTableNameCommunications vcom ON vcom.entity_id = contact_a.id
-        LEFT JOIN civicrm_email email ON (email.contact_id = contact_a.id AND email.is_primary = 1)
-        LEFT JOIN civicrm_phone phone ON (phone.contact_id = contact_a.id AND phone.is_primary = 1)
         LEFT JOIN civicrm_address address ON (address.contact_id = contact_a.id AND address.is_primary = 1)
         LEFT JOIN civicrm_state_province state_province ON state_province.id = address.state_province_id
         LEFT JOIN civicrm_county county ON county.id = address.county_id

@@ -32,42 +32,34 @@ function cplabels_civicrm_postProcess($formName, &$form) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
  */
 function cplabels_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Contact_Form_Task_Label') {
-    $qfKey = $form->controller->_key;
-    $customSearchSessionValues = CRM_Cplabels_Utils::getSessionVar("formValues_{$qfKey}", array());
-    if (!empty($customSearchSessionValues)) {
-      // We're coming directly from one of our custom search for carepartners labels.
-      // Add our extra "sort" field and anytyhing else we need here.
-      $sortOptions = array(
-        'sort_name' => ts('Contact Name'),
-        'postal_code' => ts('Postal Code'),
-      );
-
-      // Allow sort by Team Name on certain label searches only.
-      $customSearchClass = CRM_Utils_Array::value('customSearchClass', $customSearchSessionValues);
-      $sortTeamSearches = array (
-        'CRM_Cplabels_Form_Search_Cplabels_Volunteer',
-        'CRM_Cplabels_Form_Search_Cplabels_Client',
-      );
-      if (in_array($customSearchClass, $sortTeamSearches)) {
-        $sortOptions['team_name'] = ts('Team Name');
-      }
-
-      $form->add('select', 'cplabel_sort', ts('Sort by'), $sortOptions);
-
-      // Assign bhfe fields to the template.
-      $tpl = CRM_Core_Smarty::singleton();
-      $bhfe = (array)$tpl->get_template_vars('beginHookFormElements');
-      $bhfe[] = 'cplabel_sort';
-      $form->assign('beginHookFormElements', $bhfe);
-
-      // Pass some of these values to JavaScript.
-      $vars = array();
-      $vars['bhfe_fields'] = $bhfe;
-      CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.cplabels', 'js/CRM_Contact_Form_Task_Label.js', 100, 'page-footer');
-      CRM_Core_Resources::singleton()->addVars('cplabels', $vars);
-    }
+  if ($formName == 'CRM_Labelsort_Contact_Form_Task_Label_Sortable') {
+  $qfKey = $form->controller->_key;
+  $customSearchSessionValues = CRM_Cplabels_Utils::getSessionVar("formValues_{$qfKey}", array());
+    // Pass some of these values to JavaScript.
+    // $customSearchClass is needed to show/hide "Team Name" sort option.
+    // We could do it here, but this hook may fire before the labelsort extension's hook,
+    // in which case the "Sort" field won't even exist.
+    $vars = array();
+    $vars['customSearchClass'] = CRM_Utils_Array::value('customSearchClass', $customSearchSessionValues);;
+    CRM_Core_Resources::singleton()->addVars('cplabels', $vars);
+    CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.cplabels', 'js/CRM_Labelsort_Contact_Form_Task_Label_Sortable.js', 100, 'page-footer');
   }
+}
+
+
+/**
+ * Implements hook_civicrm_alterMailingLabelRows().
+ *
+ * @link https://github.com/twomice/com.joineryhq.labelsort/blob/master/README.md
+ *
+ * @param Array $rows The rows that will be used to build mailing labels, in
+ *    their default sorting order; each row is an array of elements for the
+ *    given contact.
+ * @param type $formValues The form values submitted in the "Make Mailing Labels" form.
+ * @return void
+ */
+function cplabels_civicrm_alterMailingLabelRows(&$rows, $formValues) {
+  CRM_Cplabels_Utils::sortLabelRows($rows, $formValues);
 }
 
 /**

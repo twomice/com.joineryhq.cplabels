@@ -47,8 +47,6 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
       E::ts('State') => 'state_province',
       E::ts('Postal Code') => 'postal_code',
       E::ts('County') => 'county',
-      E::ts('email') => 'email',
-      E::ts('phone') => 'phone',
     );
     return $columns;
   }
@@ -84,9 +82,7 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
       address.city,
       state_province.name as state_province,
       address.postal_code,
-      county.name as county,
-      email.email,
-      phone.phone
+      county.name as county
     ";
   }
 
@@ -105,8 +101,6 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
         civicrm_contact contact_a
         INNER JOIN $customTableNameParticipation vpart ON vpart.entity_id = contact_a.id
         INNER  JOIN $customTableNameHealth vhealth ON vhealth.entity_id = contact_a.id
-        LEFT JOIN civicrm_email email ON (email.contact_id = contact_a.id AND email.is_primary = 1)
-        LEFT JOIN civicrm_phone phone ON (phone.contact_id = contact_a.id AND phone.is_primary = 1)
         LEFT JOIN civicrm_address address ON (address.contact_id = contact_a.id AND address.is_primary = 1)
         LEFT JOIN civicrm_state_province state_province ON state_province.id = address.state_province_id
         LEFT JOIN civicrm_county county ON county.id = address.county_id

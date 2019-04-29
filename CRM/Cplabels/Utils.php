@@ -1,25 +1,15 @@
 <?php
 
 class CRM_Cplabels_Utils {
-  public static function sortLabelRows($rows, $labelFormValues) {
-    // If cplabel_sort isn't defined, either it's not our custom search, or
-    // there's just no sorting to do. Do nothing and return rows unchanged.
-    $sort = CRM_Utils_Array::value('cplabel_sort', $labelFormValues);
-    if (empty($sort)) {
-      return $rows;
-    }
+  public static function sortLabelRows(&$rows, $labelFormValues) {
 
     // Compile and store some summary data for this set of labels.
     $labelFormHash = CRM_Cplabels_Utils::constructLabelFormHash($labelFormValues);
     $labelSummaryData = CRM_Cplabels_Utils::buildLabelSummaryData($rows);
     CRM_Cplabels_Utils::setSessionVar("labelSummaryData_{$labelFormHash}", $labelSummaryData);
 
-    if ($sort == 'postal_code') {
-      uasort($rows, function($a, $b) {
-        return strcmp($a['postal_code'], $b['postal_code']);
-      });
-    }
-    elseif ($sort == 'team_name') {
+    $sort = CRM_Utils_Array::value('labelsort_sort', $labelFormValues);
+    if ($sort == 'volunteer_team_name') {
       if ($qfKey = CRM_Utils_Array::value('qfKey', $labelFormValues)) {
         $customSearchSessionValues = CRM_Cplabels_Utils::getSessionVar("formValues_{$qfKey}", array());
         if (!empty($customSearchSessionValues)) {
@@ -64,7 +54,47 @@ class CRM_Cplabels_Utils {
         }
       }
     }
-    return $rows;
+    if ($sort == 'client_team_name') {
+      if ($qfKey = CRM_Utils_Array::value('qfKey', $labelFormValues)) {
+        $customSearchSessionValues = CRM_Cplabels_Utils::getSessionVar("formValues_{$qfKey}", array());
+        if (!empty($customSearchSessionValues)) {
+          $api_params = [
+            'sequential' => 1,
+            'return' => ["contact_id_a", "contact_id_b"],
+            'relationship_type_id' => 18,
+            'api.Contact.getsingle' => ['id' => "\$value.contact_id_a", 'return' => ["display_name"]],
+            'contact_id_b' => ['IN' => array_keys($rows)],
+            'options' => [
+              'sort' => 'id DESC',
+            ],
+          ];
+          if ($teams = CRM_Utils_Array::value('team', $customSearchSessionValues)) {
+            $api_params['contact_id_a'] = ['IN' => $teams];
+          }
+          $result = civicrm_api3('relationship', 'get', $api_params);
+          foreach (CRM_Utils_Array::value('values', $result, array()) as $value) {
+            $rows[$value['contact_id_b']]['team_name'] = $value['api.Contact.getsingle']['display_name'];
+          }
+          uasort($rows, function($a, $b) {
+            return strcmp($a['team_name'], $b['team_name']);
+          });
+          // Insert team headers by wasting one label per team.
+          $teamName = '';
+          $newRows = array();
+          foreach ($rows as $cid => $row) {
+            if ($row['team_name'] != $teamName) {
+              $teamName = $row['team_name'];
+              $teamRow = array_fill_keys(array_keys($row), '');
+              $teamRow['addressee_display'] = '-------------------';
+              $teamRow['street_address'] = $teamName;
+              $newRows[$teamName] = $teamRow;
+            }
+            $newRows[$cid] = $row;
+          }
+          $rows = $newRows;
+        }
+      }
+    }
   }
 
   public static function arrayToSqlInValues($arr = array(), $type, $emptyValue = "''") {
@@ -116,7 +146,11 @@ class CRM_Cplabels_Utils {
       ));
       $uniques[$key][] = CRM_Utils_Array::value('display_name', $row) . " ($cid)";
 
-      $zipcounts[substr(CRM_Utils_Array::value('postal_code', $row), 0, 3)]++;
+      $zipPrefix = substr(CRM_Utils_Array::value('postal_code', $row), 0, 3);
+      if (!array_key_exists($zipPrefix, $zipcounts)) {
+        $zipcounts[$zipPrefix] = 0;
+      }
+      $zipcounts[$zipPrefix]++;
     }
     $duplicates = array_filter($uniques, function($value){
       return count($value) > 1;

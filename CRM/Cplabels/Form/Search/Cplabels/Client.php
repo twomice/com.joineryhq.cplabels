@@ -120,6 +120,9 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
      * are part of the search criteria
      */
     $form->assign('elements', array('team', 'diagnosis', 'min_age', 'max_age', 'limit'));
+
+    $form->addRule('team', E::ts('Field "Team" is required'),'required');
+    $form->addRule('diagnosis', E::ts('Field "Diagnosis" is required'),'required');
   }
 
   /**
@@ -169,7 +172,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
     // delegate to $this->sql(), $this->select(), $this->from(), $this->where(), etc.
     $sort = 'contact_a.sort_name';
     $sql = $this->sql($this->select(), $offset, $rowcount, $sort, $includeContactIDs, NULL);
-        return $sql;
+    return $sql;
   }
 
   /**
@@ -179,6 +182,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
    */
   function select() {
     return "
+      contact_a.id as contact_id,
       sort_name,
       street_address,
       city,
