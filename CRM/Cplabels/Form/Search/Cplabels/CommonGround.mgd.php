@@ -3,13 +3,13 @@
 // The record will be automatically inserted, updated, or deleted from the
 // database as appropriate. For more details, see "hook_civicrm_managed" at:
 // http://wiki.civicrm.org/confluence/display/CRMDOC42/Hook+Reference
-return array (
-  0 => 
-  array (
+return array(
+  0 =>
+  array(
     'name' => 'CRM_Cplabels_Form_Search_Cplabels_CommonGround',
     'entity' => 'CustomSearch',
-    'params' => 
-    array (
+    'params' =>
+    array(
       'version' => 3,
       'label' => 'Cplabels_CommonGround',
       'description' => 'Cplabels_CommonGround (com.joineryhq.cplabels)',

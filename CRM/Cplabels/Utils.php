@@ -1,6 +1,7 @@
 <?php
 
 class CRM_Cplabels_Utils {
+
   public static function sortLabelRows(&$rows, $labelFormValues) {
 
     // Compile and store some summary data for this set of labels.
@@ -103,7 +104,7 @@ class CRM_Cplabels_Utils {
     }
     $placeholders = $params = [];
     $i = 1;
-    foreach ($arr as $value){
+    foreach ($arr as $value) {
       $placeholders[] = "%$i";
       $params[$i] = array($value, $type);
       $i++;
@@ -152,7 +153,7 @@ class CRM_Cplabels_Utils {
       }
       $zipcounts[$zipPrefix]++;
     }
-    $duplicates = array_filter($uniques, function($value){
+    $duplicates = array_filter($uniques, function($value) {
       return count($value) > 1;
     });
 
