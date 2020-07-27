@@ -1,7 +1,7 @@
 <?php
 
 require_once 'cplabels.civix.php';
-// use CRM_Cplabels_ExtensionUtil as E;
+use CRM_Cplabels_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_postProcess().
