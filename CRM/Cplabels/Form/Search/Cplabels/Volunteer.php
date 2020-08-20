@@ -66,6 +66,10 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
   /**
    * Get a list of summary data points
    *
+   * @return mixed;
+   *   NULL or array with keys:
+   *   - summary: string
+   *   - total: numeric
    */
   public function summary() {
     return NULL;

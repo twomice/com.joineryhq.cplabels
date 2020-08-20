@@ -26,6 +26,8 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
   /**
    * Get a list of summary data points
    *
+   * @return mixed;
+   *   NULL or array with keys:
    */
   public function summary() {
     return NULL;
