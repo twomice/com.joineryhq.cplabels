@@ -10,41 +10,41 @@
  * https://civicrm.org/blogs/totten/api-and-art-installation).
  */
 
-return array (
-  array (
+return array(
+  array(
     'name' => 'CRM_Labelsort_OptionValue_labelsort_volunteerteamname',
     'entity' => 'OptionValue',
     'params' =>
-    array (
+    array(
       'version' => 3,
-      "option_group_id"=> "labelsort_sort",
-      "label"=> "Team Name",
-      "value"=> "volunteer_team_name",
-      "name"=> "volunteer_team_name",
-      "filter"=> "0",
-      "is_default"=> "1",
-      "weight"=> "0",
-      "is_optgroup"=> "0",
-      "is_reserved"=> "1",
-      "is_active"=> "1",
+      "option_group_id" => "labelsort_sort",
+      "label" => "Team Name",
+      "value" => "volunteer_team_name",
+      "name" => "volunteer_team_name",
+      "filter" => "0",
+      "is_default" => "1",
+      "weight" => "0",
+      "is_optgroup" => "0",
+      "is_reserved" => "1",
+      "is_active" => "1",
     ),
   ),
-  array (
+  array(
     'name' => 'CRM_Labelsort_OptionValue_labelsort_clientteamname',
     'entity' => 'OptionValue',
     'params' =>
-    array (
+    array(
       'version' => 3,
-      "option_group_id"=> "labelsort_sort",
-      "label"=> "Team Name",
-      "value"=> "client_team_name",
-      "name"=> "client_team_name",
-      "filter"=> "0",
-      "is_default"=> "1",
-      "weight"=> "0",
-      "is_optgroup"=> "0",
-      "is_reserved"=> "1",
-      "is_active"=> "1",
+      "option_group_id" => "labelsort_sort",
+      "label" => "Team Name",
+      "value" => "client_team_name",
+      "name" => "client_team_name",
+      "filter" => "0",
+      "is_default" => "1",
+      "weight" => "0",
+      "is_optgroup" => "0",
+      "is_reserved" => "1",
+      "is_active" => "1",
     ),
   ),
 );

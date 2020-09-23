@@ -15,7 +15,7 @@ function cplabels_civicrm_postProcess($formName, &$form) {
       'CRM_Cplabels_Form_Search_Cplabels_CommonGround',
       'CRM_Cplabels_Form_Search_Cplabels_Client',
     );
-    
+
     if (in_array($form->getVar('_customSearchClass'), $supportedSearches)) {
       // This is one of our custom searches for carepartners labels. Cache the
       // form values in the session.
@@ -33,8 +33,8 @@ function cplabels_civicrm_postProcess($formName, &$form) {
  */
 function cplabels_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Labelsort_Contact_Form_Task_Label_Sortable') {
-  $qfKey = $form->controller->_key;
-  $customSearchSessionValues = CRM_Cplabels_Utils::getSessionVar("formValues_{$qfKey}", array());
+    $qfKey = $form->controller->_key;
+    $customSearchSessionValues = CRM_Cplabels_Utils::getSessionVar("formValues_{$qfKey}", array());
     // Pass some of these values to JavaScript.
     // $customSearchClass is needed to show/hide "Team Name" sort option.
     // We could do it here, but this hook may fire before the labelsort extension's hook,
@@ -46,17 +46,11 @@ function cplabels_civicrm_buildForm($formName, &$form) {
   }
 }
 
-
 /**
  * Implements hook_civicrm_alterMailingLabelRows().
  *
  * @link https://github.com/twomice/com.joineryhq.labelsort/blob/master/README.md
  *
- * @param Array $rows The rows that will be used to build mailing labels, in
- *    their default sorting order; each row is an array of elements for the
- *    given contact.
- * @param type $formValues The form values submitted in the "Make Mailing Labels" form.
- * @return void
  */
 function cplabels_civicrm_alterMailingLabelRows(&$rows, $formValues) {
   CRM_Cplabels_Utils::sortLabelRows($rows, $formValues);
@@ -199,24 +193,24 @@ function cplabels_civicrm_entityTypes(&$entityTypes) {
  * Implements hook_civicrm_preProcess().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function cplabels_civicrm_preProcess($formName, &$form) {
+ */
+// function cplabels_civicrm_preProcess($formName, &$form) {
 
-} // */
+// } // */
 
 /**
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
-function cplabels_civicrm_navigationMenu(&$menu) {
-  _cplabels_civix_insert_navigation_menu($menu, 'Mailings', array(
-    'label' => E::ts('New subliminal message'),
-    'name' => 'mailing_subliminal_message',
-    'url' => 'civicrm/mailing/subliminal',
-    'permission' => 'access CiviMail',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _cplabels_civix_navigationMenu($menu);
-} // */
+ */
+// function cplabels_civicrm_navigationMenu(&$menu) {
+//   _cplabels_civix_insert_navigation_menu($menu, 'Mailings', array(
+//     'label' => E::ts('New subliminal message'),
+//     'name' => 'mailing_subliminal_message',
+//     'url' => 'civicrm/mailing/subliminal',
+//     'permission' => 'access CiviMail',
+//     'operator' => 'OR',
+//     'separator' => 0,
+//   ));
+//   _cplabels_civix_navigationMenu($menu);
+// } // */

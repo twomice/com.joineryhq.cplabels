@@ -5,7 +5,8 @@ use CRM_Cplabels_ExtensionUtil as E;
  * A custom contact search
  */
 class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Search_Custom_Base implements CRM_Contact_Form_Search_Interface {
-  function __construct(&$formValues) {
+
+  public function __construct(&$formValues) {
     parent::__construct($formValues);
   }
 
@@ -18,18 +19,17 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
     $this->setTitle(ts('Mailing Labels: Common Ground'));
 
     // This search has no editable criteria.
-    $form->addElement('static', 'statichtml', '', '<p class="status alert">'. E::ts('This search has no editable criteria. Please click "Search".') . '</p>');
+    $form->addElement('static', 'statichtml', '', '<p class="status alert">' . E::ts('This search has no editable criteria. Please click "Search".') . '</p>');
     $form->assign('elements', array('statichtml'));
   }
 
   /**
    * Get a list of summary data points
    *
-   * @return mixed; NULL or array with keys:
-   *  - summary: string
-   *  - total: numeric
+   * @return mixed;
+   *   NULL or array with keys:
    */
-  function summary() {
+  public function summary() {
     return NULL;
     // return array(
     //   'summary' => 'This is a summary',
@@ -42,7 +42,7 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
    *
    * @return array, keys are printable column headers and values are SQL column names
    */
-  function &columns() {
+  public function &columns() {
     // return by reference
     $columns = array(
       E::ts('Name') => 'sort_name',
@@ -65,7 +65,7 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
    * @param bool $justIDs
    * @return string, sql
    */
-  function all($offset = 0, $rowcount = 0, $sort = NULL, $includeContactIDs = FALSE, $justIDs = FALSE) {
+  public function all($offset = 0, $rowcount = 0, $sort = NULL, $includeContactIDs = FALSE, $justIDs = FALSE) {
     // delegate to $this->sql(), $this->select(), $this->from(), $this->where(), etc.
     $sort = 'contact_a.sort_name';
     $sql = $this->sql($this->select(), $offset, $rowcount, $sort, $includeContactIDs, NULL);
@@ -77,7 +77,7 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
    *
    * @return string, sql fragment with SELECT arguments
    */
-  function select() {
+  public function select() {
     return "
       DISTINCT
       contact_a.id as contact_id,
@@ -95,7 +95,7 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
    *
    * @return string, sql fragment with FROM and JOIN clauses
    */
-  function from() {
+  public function from() {
 
     $customTableNameParticipation = CRM_Cplabels_Utils::getCustomGroupProp('Participation');
     $customTableNameHealth = CRM_Cplabels_Utils::getCustomGroupProp('Health');
@@ -136,7 +136,7 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
    *
    * @return string, template path (findable through Smarty template path)
    */
-  function templateFile() {
+  public function templateFile() {
     return 'CRM/Contact/Form/Search/Custom.tpl';
   }
 
@@ -146,7 +146,7 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
    * @param array $row modifiable SQL result row
    * @return void
    */
-  function alterRow(&$row) {
+  public function alterRow(&$row) {
   }
 
 }

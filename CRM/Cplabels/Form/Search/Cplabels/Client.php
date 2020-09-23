@@ -5,7 +5,8 @@ use CRM_Cplabels_ExtensionUtil as E;
  * A custom contact search
  */
 class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_Custom_Base implements CRM_Contact_Form_Search_Interface {
-  function __construct(&$formValues) {
+
+  public function __construct(&$formValues) {
     parent::__construct($formValues);
   }
 
@@ -25,7 +26,6 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
     $includeContactIDs = FALSE,
     $groupBy = NULL
   ) {
-
 
     $subselect = "SELECT
       DISTINCT
@@ -125,18 +125,19 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
      */
     $form->assign('elements', array('team', 'diagnosis', 'min_age', 'max_age', 'limit'));
 
-    $form->addRule('team', E::ts('Field "Team" is required'),'required');
-    $form->addRule('diagnosis', E::ts('Field "Diagnosis" is required'),'required');
+    $form->addRule('team', E::ts('Field "Team" is required'), 'required');
+    $form->addRule('diagnosis', E::ts('Field "Diagnosis" is required'), 'required');
   }
 
   /**
    * Get a list of summary data points
    *
-   * @return mixed; NULL or array with keys:
-   *  - summary: string
-   *  - total: numeric
+   * @return mixed;
+   *   NULL or array with keys:
+   *   - summary: string
+   *   - total: numeric
    */
-  function summary() {
+  public function summary() {
     return NULL;
     // return array(
     //   'summary' => 'This is a summary',
@@ -149,7 +150,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
    *
    * @return array, keys are printable column headers and values are SQL column names
    */
-  function &columns() {
+  public function &columns() {
     // return by reference
     $columns = array(
       E::ts('Name') => 'sort_name',
@@ -172,7 +173,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
    * @param bool $justIDs
    * @return string, sql
    */
-  function all($offset = 0, $rowcount = 0, $sort = NULL, $includeContactIDs = FALSE, $justIDs = FALSE) {
+  public function all($offset = 0, $rowcount = 0, $sort = NULL, $includeContactIDs = FALSE, $justIDs = FALSE) {
     // delegate to $this->sql(), $this->select(), $this->from(), $this->where(), etc.
     $sort = 'contact_a.sort_name';
     $sql = $this->sql($this->select(), $offset, $rowcount, $sort, $includeContactIDs, NULL);
@@ -184,7 +185,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
    *
    * @return string, sql fragment with SELECT arguments
    */
-  function select() {
+  public function select() {
     return "
       contact_a.id as contact_id,
       sort_name,
@@ -201,7 +202,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
    *
    * @return string, sql fragment with FROM and JOIN clauses
    */
-  function from() {
+  public function from() {
 
     $customTableNameHealth = CRM_Cplabels_Utils::getCustomGroupProp('Health');
     $customTableNameParticipation = CRM_Cplabels_Utils::getCustomGroupProp('Participation');
@@ -218,7 +219,6 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
         INNER JOIN $customTableNameHealth vhealth ON vhealth.entity_id = contact_a.id
         INNER JOIN $customTableNameParticipation vpart ON vpart.entity_id = contact_a.id
     ";
-
 
   }
 
@@ -297,7 +297,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
    *
    * @return string, template path (findable through Smarty template path)
    */
-  function templateFile() {
+  public function templateFile() {
     return 'CRM/Contact/Form/Search/Custom.tpl';
   }
 
@@ -307,7 +307,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Client extends CRM_Contact_Form_Search_C
    * @param array $row modifiable SQL result row
    * @return void
    */
-  function alterRow(&$row) {
+  public function alterRow(&$row) {
   }
 
 }

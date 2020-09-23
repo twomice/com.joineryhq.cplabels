@@ -11,7 +11,7 @@
   }
  
   if (CRM.vars.cplabels.customSearchClass) {
-
+    // jshint multistr: true
     // Append "view summary" button, disabled.
     $('div.crm-contact-task-mailing-label-form-block').append('\n\
   <fieldset>\n\
