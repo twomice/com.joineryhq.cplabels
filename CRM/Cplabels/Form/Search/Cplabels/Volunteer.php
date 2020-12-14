@@ -16,7 +16,7 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
   public function buildForm(&$form) {
 
     // Define a custom title for the search form.
-    $this->setTitle(ts('Mailing Labels: Team Volunteers'));
+    $this->setTitle(E::ts('Mailing Labels: Team Volunteers'));
 
     // add select for team
     $api_params = array(
@@ -34,24 +34,24 @@ class CRM_Cplabels_Form_Search_Cplabels_Volunteer extends CRM_Contact_Form_Searc
     foreach ($result['values'] as $value) {
       $team[$value['contact_id']] = $value['display_name'];
     }
-    $form->addElement('select', 'team', ts('Team'), $team, array('class' => 'crm-select2 huge', 'multiple' => TRUE));
+    $form->addElement('select', 'team', E::ts('Team'), $team, array('class' => 'crm-select2 huge', 'multiple' => TRUE));
 
     // add select for service types
     $custom_id = CRM_Cplabels_Utils::getCustomFieldProp('Service_Type', 'Volunteer_details');
     $serveType = CRM_Core_PseudoConstant::get('CRM_Core_BAO_CustomField', "custom_{$custom_id}", array(), 'search');
-    $form->addElement('select', 'serve_type', ts('Service type'), $serveType, array('class' => 'crm-select2 huge', 'multiple' => TRUE));
+    $form->addElement('select', 'serve_type', E::ts('Service type'), $serveType, array('class' => 'crm-select2 huge', 'multiple' => TRUE));
 
     // Add select for communication preference.
     $limitOptions = array(
-      'mail_preferred' => ts('Print only those who prefer mail'),
-      'all' => ts('Print all'),
+      'mail_preferred' => E::ts('Print only those who prefer mail'),
+      'all' => E::ts('Print all'),
     );
-    $form->addElement('select', 'limit', ts('Limit'), $limitOptions, array('class' => 'crm-select2 huge'));
+    $form->addElement('select', 'limit', E::ts('Limit'), $limitOptions, array('class' => 'crm-select2 huge'));
 
     // Add selects for correspondence types.
     $custom_id = CRM_Cplabels_Utils::getCustomFieldProp('Correspondence_types', 'Communication');
     $correspondenceTypeOptions = array('' => '') + CRM_Core_PseudoConstant::get('CRM_Core_BAO_CustomField', "custom_{$custom_id}", array(), 'search');
-    $form->addElement('select', 'correspondence_type', ts('Correspondence type'), $correspondenceTypeOptions, array('class' => 'crm-select2 huge'));
+    $form->addElement('select', 'correspondence_type', E::ts('Correspondence type'), $correspondenceTypeOptions, array('class' => 'crm-select2 huge'));
 
     /**
      * if you are using the standard template, this array tells the template what elements
