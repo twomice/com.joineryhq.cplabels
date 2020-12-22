@@ -16,7 +16,7 @@ class CRM_Cplabels_Form_Search_Cplabels_CommonGround extends CRM_Contact_Form_Se
   public function buildForm(&$form) {
 
     // Define a custom title for the search form.
-    $this->setTitle(ts('Mailing Labels: Common Ground'));
+    $this->setTitle(E::ts('Mailing Labels: Common Ground'));
 
     // This search has no editable criteria.
     $form->addElement('static', 'statichtml', '', '<p class="status alert">' . E::ts('This search has no editable criteria. Please click "Search".') . '</p>');
