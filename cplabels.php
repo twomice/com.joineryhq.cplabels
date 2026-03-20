@@ -110,3 +110,22 @@ function cplabels_civicrm_enable() {
 //   ));
 //   _cplabels_civix_navigationMenu($menu);
 // } // */
+
+
+/**
+ * Implements hook_civicrm_scanClasses
+ *
+ * @see CRM_Utils_Hook::scanClasses()
+ */
+function cplabels_civicrm_scanClasses(array &$classes) {
+  // Example 1: Declare the exact classes that should be scanned.
+  // $classes[] = "CRM_Example_Class";
+
+  // Example 2: Scan specific subfolder(s)
+  \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'Civi/Api4', '\\');
+  // \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'Civi/Foobar', '\\');
+  // \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'CRM/Foobar', '_');
+
+  // Example 3: Scan specific folder(s), with exclusions
+  // \Civi\Core\ClassScanner::scanFolders($classes, __DIR__, 'Civi', '\\', ';...regex...;');
+}
